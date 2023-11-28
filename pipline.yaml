@@ -1,0 +1,29 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g next
+      npm install
+      npm run build 
+    displayName: 'npm install and build'
+
+  - task: AzureStaticWebApp@0
+    inputs:
+      app_location : "/"
+      api_location: "api"
+      azure_static_web_apps_api_token: '3518c38971160b8942b2584fd9233d5fdf26c0103150a453a35f35b9da3456953-39f9deb3-f836-44ef-9359-f0529625e392010238959'
+      production_branch: 'main'
